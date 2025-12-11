@@ -105,9 +105,17 @@ class Helper
         } catch (Throwable $e) {
             // Log any exceptions during export job
             logger()->error('app/Helper.php: runExportJob: Throwable', [
-                'Message' => $e->getMessage(), 'TraceAsString' => $e->getTraceAsString(),
-                'totalRecord' => $totalRecord, 'filters' => $filters, 'checkboxValues' => $checkboxValues, 'search' => $search, 'headingColumn' => $headingColumn,
-                'downloadPrefixFileName' => $downloadPrefixFileName, 'exportClass' => $exportClass, 'batchName' => $batchName, 'extraParam' => $extraParam,
+                'Message' => $e->getMessage(),
+                'TraceAsString' => $e->getTraceAsString(),
+                'totalRecord' => $totalRecord,
+                'filters' => $filters,
+                'checkboxValues' => $checkboxValues,
+                'search' => $search,
+                'headingColumn' => $headingColumn,
+                'downloadPrefixFileName' => $downloadPrefixFileName,
+                'exportClass' => $exportClass,
+                'batchName' => $batchName,
+                'extraParam' => $extraParam,
             ]);
 
             return ['status' => false, 'message' => __('messages.common_error_message')];
@@ -143,8 +151,12 @@ class Helper
         } catch (Throwable $e) {
             // Log any exceptions during data export
             logger()->error('app/Helper.php: appendExportData: Throwable', [
-                'Message' => $e->getMessage(), 'TraceAsString' => $e->getTraceAsString(),
-                'className' => $className, 'final_data' => $final_data, 'file' => $file, 'sr_no' => $sr_no,
+                'Message' => $e->getMessage(),
+                'TraceAsString' => $e->getTraceAsString(),
+                'className' => $className,
+                'final_data' => $final_data,
+                'file' => $file,
+                'sr_no' => $sr_no,
             ]);
 
             return false;
@@ -268,7 +280,8 @@ class Helper
             }
 
             return [
-                'status' => true, 'message' => 'Merge Successfully.',
+                'status' => true,
+                'message' => 'Merge Successfully.',
                 'data' => json_encode(['downloadUrl' => Storage::url($mergedFileName), 'downloadFileName' => $downloadFileName]),
             ];
         } catch (Throwable $e) {
@@ -512,7 +525,8 @@ class Helper
 
     public static function getAllRoles()
     {
-        return Role::pluck('name', 'id')->toArray();
+        return Role::pluck('name', 'id')->take(10)->toArray();
+
         // return Cache::rememberForever('getAllRoles', function () {
         // return Role::pluck('name', 'id')->toArray();
         // });
