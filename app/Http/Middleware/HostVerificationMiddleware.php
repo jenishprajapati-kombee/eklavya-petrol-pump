@@ -15,16 +15,27 @@ class HostVerificationMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $serverName = $_SERVER['SERVER_NAME'];
-        $httpHost = $_SERVER['HTTP_HOST'];
+        // Define allowed hosts
+        $allowedHosts = [
+            'localhost',
+            '127.0.0.1',
+            'eklavya-petrol-pump-production.up.railway.app',
+        ];
 
-        // Use Laravel's url() helper to get the full URL
-        $fullUrl = url('');
-        $parsedUrl = parse_url($fullUrl);
-        $urlHost = $parsedUrl['host'] ?? '';
+        // Add APP_URL host to allowed list
+        $appUrl = config('app.url');
+        if ($appUrl) {
+            $parsedAppUrl = parse_url($appUrl);
+            if (isset($parsedAppUrl['host'])) {
+                $allowedHosts[] = $parsedAppUrl['host'];
+            }
+        }
 
-        // Compare server name and URL host
-        if ($serverName !== $urlHost) {
+        // Get the incoming request host (proxy-aware)
+        $requestHost = $request->getHost();
+
+        // Check if the request host is in the allowed list
+        if (!in_array($requestHost, $allowedHosts)) {
             abort(403, 'Forbidden: Host header mismatch');
         }
 
