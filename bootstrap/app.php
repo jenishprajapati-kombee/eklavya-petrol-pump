@@ -20,7 +20,7 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
 
         $middleware->web([
-
+            App\Http\Middleware\HostVerificationMiddleware::class,
             App\Http\Middleware\VerifyCsrfToken::class,
             Illuminate\Session\Middleware\AuthenticateSession::class,
             App\Http\Middleware\SetLocale::class,
